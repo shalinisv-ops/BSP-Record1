@@ -20,49 +20,61 @@ To design a digital Chebyshev filter using bilinear method satisfying the constr
 	Save and run the program.
 
 ## PROGRAM:
-clear all
-clc
+```
+clc;
+clear;
+close all;
 
-AP=0.8;						% Gain at passband edge frequency
-AS=0.2;						% Gain at stopband edge frequency
-PEF_D=0.2*pi;					% Passband edge digital frequency
-SEF_D=0.32*pi;					% Stopband edge digital frequncy
-T=1;						% Sampling time
-alpha_P=-20*log10(AP)				% Passband attenuation in dB
-alpha_S=-20*log10(AS)				% Stopband atenuation on dB
+% Specifications
+AP = 0.8;              % Gain at passband edge frequency
+AS = 0.2;              % Gain at stopband edge frequency
+PEF_D = 0.2*pi;        % Passband edge digital frequency
+SEF_D = 0.32*pi;       % Stopband edge digital frequency
+T = 1;                 % Sampling time
 
-PEF_A=(2/T)*tan(PEF_D/2)
-SEF_A=(2/T)*tan(SEF_D/2)
+% Passband and stopband attenuation in dB
+alpha_P = -20*log10(AP);
+alpha_S = -20*log10(AS);
 
-[N,CF]=cheb1ord(PEF_A,SEF_A,alpha_P,alpha_S,'s')	% Order and cutoff frequency
+% Prewarping of digital frequencies
+PEF_A = (2/T) * tan(PEF_D/2);
+SEF_A = (2/T) * tan(SEF_D/2);
 
-[Bn,An]=cheby1(N,alpha_P,1,'s');			% Normalised transfer function
-display('Normalized Transfer Function is,')
-Hsn=tf(Bn,An)
+% Find filter order and cutoff frequency
+[N, CF] = cheb1ord(PEF_A, SEF_A, alpha_P, alpha_S, 's');
 
-[B,A]=cheby1(N,alpha_P,CF,'s');			% Unnormalised transfer function
-display('Unnormalised Transfer Function is,')
-Hs=tf(B,A)
+% Normalized Transfer Function
+[Bn, An] = cheby1(N, alpha_P, 1, 's');
+Hsn = tf(Bn, An)
 
-[num,den]=impinvar(B,A,1/T);			% Digital Transfer function
-display('Digital Transfer Function is,')
-Hz=tf(num,den,T)
+% Unnormalized Transfer Function
+[B, A] = cheby1(N, alpha_P, CF, 's');
+Hs = tf(B, A)
 
-w=0:pi/16:pi;
-display('Frequency Response is,')
-Hw=freqz(num,den,w)				% Frequency response
-display('Magnitude Response is,')
-Hw_mag=abs(Hw)				% Magnitude response
-plot(w/pi,Hw_mag,'k');grid;
+% Impulse Invariant Transformation
+[num, den] = impinvar(B, A, 1/T);
 
-title('Magnitude Response of Chebyshev 3rd order Lowpass Filter','fontweight','b');
-xlabel('Normalised frequency, \omega/\pi','fontweight','b');
-ylabel('Magnitude','fontweight','b');
+% Digital Transfer Function
+Hz = tf(num, den, -1)
 
+% Frequency Response
+w = 0:pi/16:pi;
+Hw = freqz(num, den, w);
 
+% Magnitude Response
+Hw_mag = abs(Hw);
 
+% Plot
+plot(w/pi, Hw_mag, 'k');
+grid on;
 
+title('Magnitude Response of Chebyshev Lowpass Filter');
+xlabel('Normalized Frequency (\omega/\pi)');
+ylabel('Magnitude');
+```
 ## OUTPUT
+
+<img width="1393" height="571" alt="Screenshot 2026-06-04 085321" src="https://github.com/user-attachments/assets/04e2e211-22a2-4d4f-8d3f-a278d2d1dc1b" />
 
 
 
