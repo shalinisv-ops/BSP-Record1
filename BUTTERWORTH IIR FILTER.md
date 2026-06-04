@@ -18,6 +18,7 @@ To design a digital Butterworth filter using bilinear method satisfying the cons
 	Save and run the program
 
 ## PROGRAM:
+```
 clear all
 clc
 
@@ -59,11 +60,11 @@ plot(w/pi,Hw_mag,'k');grid;
 title('Magnitude Response of Butterworth 3rd order Lowpass Filter','fontweight','b');
 xlabel('Normalised frequency, \omega/\pi','fontweight','b');
 ylabel('Magnitude','fontweight','b');
-
-
-
+```
 
 ## OUTPUT
+<img width="1388" height="590" alt="Screenshot 2026-06-04 082304" src="https://github.com/user-attachments/assets/53906b40-6e2a-4f84-889a-cc9047231043" />
+
 
 
  
